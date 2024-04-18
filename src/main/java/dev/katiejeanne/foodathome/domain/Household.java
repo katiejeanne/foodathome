@@ -23,18 +23,6 @@ public class Household {
 
     public Household () {}
 
-    public Household(String name, User user) {
-
-        this.name = name;
-        if (user.getHousehold() != null) {
-            throw new IllegalArgumentException("User already belongs to a household");
-        }
-        users.add(user);
-        // Set user household to this if not already set
-        if (user.getHousehold() == null) {
-            user.setHousehold(this);
-        }
-    }
 
     public long getId() {
         return id;
@@ -53,15 +41,11 @@ public class Household {
     }
 
     public void addUser(User user) {
-        if (user.getHousehold() != null & user.getHousehold() != this) {
-            throw new IllegalArgumentException("User already belongs to a household.");
-        }
-        if (!users.contains(user)) {
-            users.add(user);
-        }
-        if (user.getHousehold() == null)  {
-            user.setHousehold(this);
-        }
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
     }
 
     public List<Category> getCategories() {

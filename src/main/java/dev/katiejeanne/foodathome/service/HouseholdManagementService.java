@@ -4,9 +4,12 @@ import dev.katiejeanne.foodathome.domain.Category;
 
 import java.util.List;
 
-public interface HouseholdService {
+public interface HouseholdManagementService {
 
-    void createHousehold();
+    // Households contain and manage users and categories.
+    // Users and categories do not exist outside of a household
+
+    void createNewHousehold();
 
     void addUser();
 
