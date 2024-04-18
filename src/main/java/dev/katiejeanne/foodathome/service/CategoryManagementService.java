@@ -6,7 +6,17 @@ import dev.katiejeanne.foodathome.security.SecurityUtils;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface CategoryManagementService {
 
-    public List<Category> getAllCategoriesAndItems();
+    void addItem();
+
+    void moveItem();
+
+    void removeItem();
+
+
+
+
+
+
 }
