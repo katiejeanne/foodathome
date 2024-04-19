@@ -20,14 +20,8 @@ public class Item {
     private Category category;
 
     public Item() {
+        // New items should always have in stock status by default
         this.status = Status.IN_STOCK;
-    }
-
-    public Item(String name, Category category) {
-        // Default to "In Stock"
-        this.name = name;
-        this.status = Status.IN_STOCK;
-        setCategory(category);
     }
 
     public long getId() {
@@ -38,16 +32,8 @@ public class Item {
         return category;
     }
 
-    public void setCategory(Category newCategory) {
-
-        if (this.category != null && this.category != newCategory) {
-            this.category.getItems().remove(this);
-        }
-        this.category = newCategory;
-        if (!category.getItems().contains(this)) {
-            category.addItem(this);
-        }
-
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Status getStatus() {

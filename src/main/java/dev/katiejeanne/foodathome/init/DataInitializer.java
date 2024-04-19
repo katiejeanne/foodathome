@@ -43,22 +43,6 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initializeData () {
-
-        // Initialize multiple users
-        User user1 = new User("user1","{noop}user");
-        user1 = userRepository.save(user1);
-        User user2 = new User("user2","{noop}user");
-        user2 = userRepository.save(user2);
-        User user3 = new User("user3", "{noop}user");
-        user3 = userRepository.save(user3);
-        User user4 = new User("user4", "{noop}user");
-        user4 = userRepository.save(user4);
-
-        // Initialize households
-
-
-
-
-
+        // TODO: Fill with default data
     }
 }

@@ -25,34 +25,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private HouseholdRole householdRole;
 
-    public User() {
-        // Default to admin role for new users
-        householdRole = HouseholdRole.ROLE_ADMIN;
-    }
-
-    public User(String username, String password) {
-        // While no role is provided default to Admin role
-        this.username = username;
-        this.password = password;
-        this.householdRole = HouseholdRole.ROLE_ADMIN;
-    }
-
-    public User(String username, String password, Household household) {
-        // When no role is provided default to Admin role
-        this.username = username;
-        this.password = password;
-        setHousehold(household);
-        this.householdRole = HouseholdRole.ROLE_ADMIN;
-    }
-
-    public User(String username, String password, Household household, HouseholdRole householdRole) {
-        this.username = username;
-        this.password = password;
-        setHousehold(household);
-        this.householdRole = householdRole;
-
-    }
-
+    public User() {}
 
     public long getId() {
         return id;
@@ -63,17 +36,7 @@ public class User {
     }
 
     public void setHousehold(Household household) {
-
-        if (this.household != household && this.household != null) {
-            throw new IllegalArgumentException("User already belongs to a household.");
-        }
         this.household = household;
-        // Add to household if not already added
-        if (!household.getUsers().contains(this)) {
-            household.addUser(this);
-        }
-
-
     }
 
     public String getUsername() {

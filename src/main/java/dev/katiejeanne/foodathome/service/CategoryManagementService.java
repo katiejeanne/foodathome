@@ -1,18 +1,16 @@
 package dev.katiejeanne.foodathome.service;
 
+import dev.katiejeanne.foodathome.domain.Item;
+
+import java.util.List;
+
 public interface CategoryManagementService {
 
-    // Categories contain and manage items. Items only exist within a category.
+    // Categories contain and manage items.
+    // Items only exist within a category.
 
-    void addItem();
+    void addNewItem(Item item);
 
-    void moveItem();
-
-    void removeItem();
-
-
-
-
-
+    List<Item> getItems();
 
 }

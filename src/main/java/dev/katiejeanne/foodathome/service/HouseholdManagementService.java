@@ -1,6 +1,8 @@
 package dev.katiejeanne.foodathome.service;
 
 import dev.katiejeanne.foodathome.domain.Category;
+import dev.katiejeanne.foodathome.domain.Household;
+import dev.katiejeanne.foodathome.domain.User;
 
 import java.util.List;
 
@@ -9,17 +11,13 @@ public interface HouseholdManagementService {
     // Households contain and manage users and categories.
     // Users and categories do not exist outside of a household
 
-    void createNewHousehold();
+    void saveNewStandaloneUserAndCreateTheirHousehold(User user);
 
-    void addUser();
+    void addNewUserToHousehold(User user, Household household);
 
-    void removeUser();
+    void addCategory(Category category, Household household);
 
-    void addCategory();
-
-    void removeCategory();
-
-    List<Category> getAllCategoriesAndItems();
+    List<Category> getAllCategoriesWIthItems();
 
 
 }

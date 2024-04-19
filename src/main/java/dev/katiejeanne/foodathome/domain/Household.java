@@ -23,7 +23,6 @@ public class Household {
 
     public Household () {}
 
-
     public long getId() {
         return id;
     }
@@ -53,15 +52,7 @@ public class Household {
     }
 
     public void addCategory(Category category) {
-        if (category.getHousehold() != null & category.getHousehold() != this) {
-            throw new IllegalArgumentException("Category already belongs to a household.");
-        }
-        if (category.getHousehold() == null)  {
-            category.setHousehold(this);
-        }
-        if (!categories.contains(category)) {
-            categories.add(category);
-        }
+        categories.add(category);
     }
 
 

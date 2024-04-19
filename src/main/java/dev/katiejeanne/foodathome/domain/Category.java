@@ -24,12 +24,6 @@ public class Category {
 
     public Category() {}
 
-    public Category(String name, Household household) {
-        this.name = name;
-        household.addCategory(this);
-
-    }
-
     public String getName() {
         return name;
     }
@@ -47,16 +41,7 @@ public class Category {
     }
 
     public void setHousehold(Household household) {
-        if (this.household != null && this.household != household) {
-            throw new IllegalArgumentException("Category already belongs to a household");
-        }
-        if (this.household == null) {
-            this.household = household;
-        }
-        if (!household.getCategories().contains(this)) {
-            household.addCategory(this);
-        }
-
+        this.household = household;
     }
 
     public List<Item> getItems() {
@@ -65,14 +50,7 @@ public class Category {
 
 
     public void addItem(Item item) {
-        // First check for item to avoid an infinite loop
-        if (!items.contains(item)) {
-            items.add(item);
-        }
-        if (item.getCategory() != this) {
-            item.setCategory(this);
-        }
-
+        items.add(item);
     }
 
 }
