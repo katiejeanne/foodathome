@@ -53,4 +53,6 @@ public class Category {
         items.add(item);
     }
 
+    public void removeItem(Item item) { items.remove(item); }
+
 }

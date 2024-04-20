@@ -35,8 +35,6 @@ public class ItemRepositoryTests {
         assertNotNull(persistedItem);
         assertNotNull(persistedItem.getCategory());
         assertNotEquals(0, persistedItem.getCategory().getId());
-
-
     }
 
 

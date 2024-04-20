@@ -2,6 +2,7 @@ package dev.katiejeanne.foodathome.service;
 
 import dev.katiejeanne.foodathome.domain.Category;
 import dev.katiejeanne.foodathome.domain.Household;
+import dev.katiejeanne.foodathome.domain.HouseholdRole;
 import dev.katiejeanne.foodathome.domain.User;
 import dev.katiejeanne.foodathome.repositories.CategoryRepository;
 import dev.katiejeanne.foodathome.repositories.HouseholdRepository;
@@ -23,6 +24,10 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
     @Override
     public void saveNewStandaloneUserAndCreateTheirHousehold(User user) {
 
+        if (user == null) {
+            throw new IllegalArgumentException("User must not be null");
+        }
+
         if (user.getHousehold() != null) {
             throw new IllegalArgumentException("User already belongs to a household.");
         }
@@ -41,6 +46,9 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
             household.setName("My Household Inventory");
         }
 
+        // Set user to admin role
+        user.setHouseholdRole(HouseholdRole.ROLE_ADMIN);
+
         // Set user's household to created household
         user.setHousehold(household);
 
@@ -49,8 +57,14 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
 
     @Transactional
     @Override
-    public void addNewUserToHousehold(User user, Household household) {
+    public void addNewUserToHousehold(User user, Household household, HouseholdRole householdRole) {
+
+        if (user == null || household == null) {
+            throw new IllegalArgumentException("User and household must not be null.");
+        }
+
         if (user.getHousehold() == null) {
+            user.setHouseholdRole(householdRole);
             household.addUser(user);
             user.setHousehold(household);
             householdRepository.save(household);
@@ -63,8 +77,25 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
         }
     }
 
+    @Transactional
     @Override
     public void addCategory(Category category, Household household) {
+
+        if (category == null || household == null) {
+            throw new IllegalArgumentException("Household and user must not be null.");
+        }
+
+        if (category.getHousehold() == null) {
+            household.addCategory(category);
+            category.setHousehold(household);
+            householdRepository.save(household);
+        }
+        else if (category.getHousehold() == household) {
+            throw new IllegalStateException("Category already belongs to this household");
+        }
+        else {
+            throw new IllegalStateException("Category already belongs to a different household.");
+        }
 
     }
 
