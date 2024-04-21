@@ -7,67 +7,71 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
 
-    @Test
-    public void setUsername_newUser_setsUsername() {
-        String username = "test_user";
-        User user = new User();
-        user.setUsername(username);
+    private User user;
 
-        assertEquals(username, user.getUsername());
+    private Household household;
+
+    private String testDisplayName = "Test User";
+
+    private String testUsername = "test_user";
+
+    private String testPassword = "{noop}test";
+
+    private String testEmail = "user@example.com";
+
+
+    @BeforeEach
+    public void setUpUser() {
+        user = new User();
+        user.setPassword(testPassword);
+        user.setUsername(testUsername);
+        user.setEmail(testEmail);
+        user.setDisplayName(testDisplayName);
+
+        household = new Household();
+        household.addUser(user);
+        user.setHousehold(household);
+
+    }
+
+
+    @Test
+    public void getAndSetHousehold_whenSet_correctlyReturnsHousehold() {
+
+        assertEquals(household, user.getHousehold());
     }
 
     @Test
-    public void setPassword_newUser_setsPassword() {
+    public void getAndSetUsername_whenSet_returnsUsername() {
 
-        String password = "{noop}test";
-        User user = new User();
-        user.setPassword(password);
-
-        assertEquals(password, user.getPassword());
+        assertEquals(testUsername, user.getUsername());
     }
 
     @Test
-    public void setPassword_existingPassword_setsPassword() {
+    public void setAndGetPassword_whenSet_correctlyReturnsPassword() {
 
-        String password1 = "{noop}test";
-        User user = new User();
-        user.setPassword(password1);
-
-        String password2 = "{noop}test2";
-        user.setPassword(password2);
-
-        assertEquals(password2, user.getPassword());
+        assertEquals(testPassword, user.getPassword());
     }
 
 
     @Test
     public void setHouseholdRole_defaultToViewer_setsRole() {
 
-        User user = new User();
         user.setHouseholdRole(HouseholdRole.ROLE_VIEWER);
 
         assertEquals(HouseholdRole.ROLE_VIEWER, user.getHouseholdRole());
     }
 
     @Test
-    public void setEmail_setsEmail() {
+    public void setAndGetEmail_whenSet_correctlyReturnsEmail() {
 
-        String email = "user@example.com";
-        User user = new User();
-        user.setEmail(email);
-
-        assertEquals(email, user.getEmail());
-
+        assertEquals(testEmail, user.getEmail());
     }
 
     @Test
-    public void setDisplayName_setsDisplayName() {
+    public void setAndGetDisplayName_whenSet_correctlyReturnsDisplayName() {
 
-        String displayName = "Test User";
-        User user = new User();
-        user.setDisplayName(displayName);
-
-        assertEquals(displayName, user.getDisplayName());
+        assertEquals(testDisplayName, user.getDisplayName());
     }
 
 }

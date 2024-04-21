@@ -31,7 +31,10 @@ public class CustomUserDetailsServiceTest {
     public void loadByUsername_withValidUser_ReturnsUserDetailsObject() {
 
         // Set up test user
-        User testUser = new User("test_user","{noop}test");
+        User testUser = new User();
+        testUser.setUsername("test_user");
+        testUser.setPassword("{noop}test");
+        testUser.setHouseholdRole(HouseholdRole.ROLE_ADMIN);
 
         Household mockHousehold = mock(Household.class);
         when(mockHousehold.getId()).thenReturn(1L);
