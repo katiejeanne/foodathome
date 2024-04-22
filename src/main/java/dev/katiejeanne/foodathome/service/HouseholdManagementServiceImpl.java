@@ -102,9 +102,8 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
     @Override
     public List<Category> getAllCategoriesWIthItems() {
         Long householdId = SecurityUtils.getCurrentHouseholdId();
+        Household thisHousehold = householdRepository.findHouseholdById(householdId).orElseThrow();
 
-        List<Category> categories = categoryRepository.findAllCategoriesWithItemsUsingHouseholdId(householdId);
-
-        return categories;
+        return thisHousehold.getCategories();
     }
 }
