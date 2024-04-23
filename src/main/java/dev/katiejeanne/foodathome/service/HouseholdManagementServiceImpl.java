@@ -20,6 +20,11 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
 
     CategoryRepository categoryRepository;
 
+    public HouseholdManagementServiceImpl(HouseholdRepository householdRepository, CategoryRepository categoryRepository) {
+        this.householdRepository = householdRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
     @Transactional
     @Override
     public void saveNewStandaloneUserAndCreateTheirHousehold(User user) {
@@ -99,10 +104,12 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
 
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Category> getAllCategoriesWIthItems() {
-        Long householdId = SecurityUtils.getCurrentHouseholdId();
 
+        // Retrieve the householdId from the currently logged in user
+        Long householdId = SecurityUtils.getCurrentHouseholdId();
 
         return categoryRepository.findCategoriesByHouseholdId(householdId);
     }

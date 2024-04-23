@@ -26,10 +26,8 @@ public class RepositoryTests {
     @Autowired
     private TestEntityManager testEntityManager;
 
-
-
     @Test
-    public void findCategoryByHouseholdId_withPopulatedHousehold_returnsAllCategoriesAndItems() {
+    public void findCategoryByHouseholdId_withPopulatedHouseholds_returnsAllCategoriesAndItems() {
 
         // Create household to hold categories
         Household household1 = new Household();
