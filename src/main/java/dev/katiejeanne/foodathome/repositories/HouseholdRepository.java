@@ -8,6 +8,4 @@ import java.util.Optional;
 
 public interface HouseholdRepository extends JpaRepository<Household, Long> {
 
-    @EntityGraph(attributePaths = {"categories", "categories.items"})
-    Optional<Household> findHouseholdById(Long householdId);
 }

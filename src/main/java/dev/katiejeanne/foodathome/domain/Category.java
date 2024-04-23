@@ -19,7 +19,7 @@ public class Category {
     @JoinColumn(name = "category_household")
     private Household household;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Item> items = new ArrayList<>();
 
     public Category() {}
