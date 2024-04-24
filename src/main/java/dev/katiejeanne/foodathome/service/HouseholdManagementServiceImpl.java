@@ -68,17 +68,17 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
             throw new IllegalArgumentException("User and household must not be null.");
         }
 
-        if (user.getHousehold() == null) {
-            user.setHouseholdRole(householdRole);
-            household.addUser(user);
-            user.setHousehold(household);
-            householdRepository.save(household);
-        }
-        else if (user.getHousehold() == household) {
-            throw new IllegalStateException("User already belongs to this household");
+
+        if (user.getHousehold() != household && user.getHousehold() != null) {
+            throw new IllegalStateException("User already belongs to a different household.");
         }
         else {
-            throw new IllegalStateException("User already belongs to a different household.");
+            user.setHouseholdRole(householdRole);
+            if (!household.getUsers().contains(user)) {
+                household.addUser(user);
+            }
+            user.setHousehold(household);
+            householdRepository.save(household);
         }
     }
 
@@ -87,21 +87,19 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
     public void addCategory(Category category, Household household) {
 
         if (category == null || household == null) {
-            throw new IllegalArgumentException("Household and user must not be null.");
+            throw new IllegalArgumentException("Household and category must not be null.");
         }
 
-        if (category.getHousehold() == null) {
-            household.addCategory(category);
+        if (category.getHousehold() != household && category.getHousehold() != null) {
+            throw new IllegalStateException("Category already belongs to a different household.");
+        }
+        else {
+            if (!household.getCategories().contains(category)) {
+                household.addCategory(category);
+            }
             category.setHousehold(household);
             householdRepository.save(household);
         }
-        else if (category.getHousehold() == household) {
-            throw new IllegalStateException("Category already belongs to this household");
-        }
-        else {
-            throw new IllegalStateException("Category already belongs to a different household.");
-        }
-
     }
 
     @Transactional(readOnly = true)
