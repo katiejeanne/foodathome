@@ -1,7 +1,6 @@
 package dev.katiejeanne.foodathome.domain;
 
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
 @Entity
 public class Item {

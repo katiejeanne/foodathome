@@ -1,21 +1,23 @@
 package dev.katiejeanne.foodathome.service;
 
-import dev.katiejeanne.foodathome.domain.Household;
-import dev.katiejeanne.foodathome.domain.HouseholdRole;
-import dev.katiejeanne.foodathome.domain.User;
+import dev.katiejeanne.foodathome.TestSetupUtility;
+import dev.katiejeanne.foodathome.domain.*;
 import dev.katiejeanne.foodathome.repositories.CategoryRepository;
 import dev.katiejeanne.foodathome.repositories.HouseholdRepository;
 import dev.katiejeanne.foodathome.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Transactional
 public class HouseholdManagementServiceTests {
 
@@ -166,5 +168,160 @@ public class HouseholdManagementServiceTests {
         // User was not saved
         assertEquals(0, user.getId());
     }
+
+    @Test
+    public void addCategory_validCategoryAndHousehold_correctlySavesBoth() {
+
+        // Create category and household
+        Category category = new Category();
+        Household household = new Household();
+
+        // Add category to household
+        householdManagementService.addCategoryToHousehold(category, household);
+        Long categoryId = category.getId();
+
+        // Retrieve from repository
+        Optional<Category> retrievedCategory = categoryRepository.findById(categoryId);
+
+        // Verify category and household
+        assertTrue(retrievedCategory.isPresent());
+        assertNotEquals(0, retrievedCategory.get().getId());
+
+        Household retrievedHousehold = retrievedCategory.get().getHousehold();
+        assertNotNull(retrievedHousehold);
+        assertTrue(retrievedHousehold.getCategories().contains(retrievedCategory.get()));
+        assertNotEquals(0, household.getId());
+
+    }
+
+    @Test
+    public void addCategory_categoryAlreadyBelongsToDifferentHousehold_throwsException() {
+
+        // Attach a category to a household
+        Household household1 = new Household();
+        Category category = new Category();
+        category.setHousehold(household1);
+        household1.addCategory(category);
+
+        // Create second household
+        Household household2 = new Household();
+
+        // Attempt to add category to second household
+        assertThrows(IllegalStateException.class, () -> householdManagementService.addCategoryToHousehold(category, household2));
+
+        // Make sure no entities were saved
+        assertEquals(0, household1.getId());
+        assertEquals(0, household2.getId());
+        assertEquals(0, category.getId());
+
+    }
+
+    @Test
+    public void addCategoryToHousehold_categoryAlreadyBelongsToHousehold_passesWithoutDuplication() {
+
+        // Add category to household
+        Household household = new Household();
+        Category category = new Category();
+        category.setHousehold(household);
+        household.addCategory(category);
+
+        // Use service to try to add category again
+        householdManagementService.addCategoryToHousehold(category, household);
+        Long categoryId = category.getId();
+
+        // Retrieve from repository and verify
+        Optional<Category> retrievedCategory = categoryRepository.findById(categoryId);
+        assertTrue(retrievedCategory.isPresent());
+
+        Household retrievedHousehold = retrievedCategory.get().getHousehold();
+        assertNotEquals(0, retrievedHousehold.getId());
+        assertEquals(1, retrievedHousehold.getCategories().size());
+        assertTrue(retrievedHousehold.getCategories().contains(retrievedCategory.get()));
+
+    }
+
+    @Test
+    public void addCategoryToHousehold_nullCategory_throwsException() {
+
+        // Set up entities
+        Category category = null;
+        Household household = new Household();
+
+        // Null category throws an exception
+        assertThrows(IllegalArgumentException.class, () -> householdManagementService.addCategoryToHousehold(category, household));
+
+    }
+
+    @Test
+    public void addCategoryToHousehold_nullHousehold_throwsException() {
+
+        // Set up entities
+        Category category = new Category();
+        Household household = null;
+
+        // Null category throws an exception
+        assertThrows(IllegalArgumentException.class, () -> householdManagementService.addCategoryToHousehold(category, household));
+
+    }
+
+    @Test
+    public void getAllCategoriesWithItems() {
+
+        // Set up entities
+        // Create household to hold categories
+        Household household1 = new Household();
+
+        // Create category 1
+        Category category1 = new Category();
+        household1.addCategory(category1);
+        category1.setHousehold(household1);
+
+        // Add item to category 1
+        Item item1 = new Item();
+        item1.setCategory(category1);
+        category1.addItem(item1);
+
+        // Add second category to household
+        Category category2 = new Category();
+        category2.setHousehold(household1);
+        household1.addCategory(category2);
+
+        // Add item to second category
+        Item item2 = new Item();
+        item2.setCategory(category2);
+        category2.addItem(item2);
+
+        // Create second household
+        Household household2 = new Household();
+
+        // Create category 3
+        Category category3 = new Category();
+        category3.setHousehold(household2);
+        household2.addCategory(category3);
+
+        // Add item to category 3
+        Item item3 = new Item();
+        item3.setCategory(category3);
+        category3.addItem(item3);
+
+        // Save household and keep id for later reference
+        householdRepository.save(household1);
+        householdRepository.save(household2);
+        long householdId = household1.getId();
+
+        // Set up security context with correct householdId
+        TestSetupUtility.setUpSecurityContext("test_user","{noop}test", householdId);
+
+        // Get list of categories
+        List<Category> retrievedCategories = householdManagementService.getAllCategoriesWIthItems();
+
+        // Make sure list returns correct number of categories and all their items
+        assertEquals(2, retrievedCategories.size());
+        for (Category category : retrievedCategories) {
+            assertEquals(1, category.getItems().size());
+        }
+
+    }
+
 
 }

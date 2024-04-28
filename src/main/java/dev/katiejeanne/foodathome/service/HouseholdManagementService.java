@@ -12,11 +12,11 @@ public interface HouseholdManagementService {
     // Households contain and manage users and categories.
     // Users and categories do not exist outside a household
 
-    void saveNewStandaloneUserAndCreateTheirHousehold(User user);
+    Household saveNewStandaloneUserAndCreateTheirHousehold(User user);
 
-    void addNewUserToHousehold(User user, Household household, HouseholdRole householdRole);
+    Household addNewUserToHousehold(User user, Household household, HouseholdRole householdRole);
 
-    void addCategory(Category category, Household household);
+    Category addCategoryToHousehold(Category category, Household household);
 
     List<Category> getAllCategoriesWIthItems();
 

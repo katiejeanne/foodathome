@@ -27,7 +27,7 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
 
     @Transactional
     @Override
-    public void saveNewStandaloneUserAndCreateTheirHousehold(User user) {
+    public Household saveNewStandaloneUserAndCreateTheirHousehold(User user) {
 
         if (user == null) {
             throw new IllegalArgumentException("User must not be null");
@@ -57,12 +57,14 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
         // Set user's household to created household
         user.setHousehold(household);
 
-        householdRepository.save(household);
+        household = householdRepository.save(household);
+
+        return household;
     }
 
     @Transactional
     @Override
-    public void addNewUserToHousehold(User user, Household household, HouseholdRole householdRole) {
+    public Household addNewUserToHousehold(User user, Household household, HouseholdRole householdRole) {
 
         if (user == null || household == null) {
             throw new IllegalArgumentException("User and household must not be null.");
@@ -78,13 +80,15 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
                 household.addUser(user);
             }
             user.setHousehold(household);
-            householdRepository.save(household);
+            household = householdRepository.save(household);
         }
+
+        return household;
     }
 
     @Transactional
     @Override
-    public void addCategory(Category category, Household household) {
+    public Category addCategoryToHousehold(Category category, Household household) {
 
         if (category == null || household == null) {
             throw new IllegalArgumentException("Household and category must not be null.");
@@ -98,8 +102,10 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
                 household.addCategory(category);
             }
             category.setHousehold(household);
-            householdRepository.save(household);
+            category = categoryRepository.save(category);
         }
+
+        return category;
     }
 
     @Transactional(readOnly = true)

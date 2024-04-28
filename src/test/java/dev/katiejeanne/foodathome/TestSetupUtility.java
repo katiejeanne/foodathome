@@ -5,7 +5,6 @@ import dev.katiejeanne.foodathome.domain.Household;
 import dev.katiejeanne.foodathome.domain.HouseholdRole;
 import dev.katiejeanne.foodathome.domain.Item;
 import dev.katiejeanne.foodathome.security.CustomUserDetails;
-import org.mockito.Mockito;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -14,9 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Collection;
-import static org.mockito.Mockito.when;
 
 public class TestSetupUtility {
 

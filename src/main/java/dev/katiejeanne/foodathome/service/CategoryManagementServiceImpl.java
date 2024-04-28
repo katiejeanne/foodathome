@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class CategoryManagementServiceImpl implements CategoryManagementService {
 
@@ -21,7 +19,7 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
 
     @Transactional
     @Override
-    public void addItem(Item item, Category category) {
+    public Category addItemToCategory(Item item, Category category) {
 
         if (item == null || category == null) {
             throw new IllegalArgumentException("Item and category must not be null.");
@@ -30,7 +28,9 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         if (item.getCategory() != null && item.getCategory() != category) {
             removeItemFromCategory(item);
         }
-        assignNewCategory(item, category);
+        category = assignNewCategory(item, category);
+
+        return category;
     }
 
     private void removeItemFromCategory(Item item) {
@@ -39,12 +39,13 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         categoryRepository.save(formerCategory);
     }
 
-    private void assignNewCategory(Item item, Category category) {
+    private Category assignNewCategory(Item item, Category category) {
         item.setCategory(category);
         if (!category.getItems().contains(item)) {
             category.addItem(item);
         }
-        categoryRepository.save(category);
+        category = categoryRepository.save(category);
+        return category;
     }
 
 
