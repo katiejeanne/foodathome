@@ -4,41 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Food@Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Righteous&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+<form id="checklist" th:action="@{/}" th:object="${categoriesForm}" method="post">
 
-<div class="container">
+    <div>
+        <h1>Food@Home</h1>
+    </div>
+    <div class="page-header">
+        <a class="button view-all" href="http://localhost:8080">All Items</a>
+        <a class="button view-available" href="http://localhost:8080">Available Items</a>
+        <a class="button view-shopping"  href="http://localhost:8080">Shopping List</a>
+    </div>
 
-    <h1>Food@Home</h1>
+    <div th:each="category, catIndex : ${categoriesForm.categoriesAndItems}">
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">Item</th>
-                <th scope="col">Category</th>
-                <th scope="col">Status</th>
-                <th scope="col">Edit</th>
-            </tr>
-        </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col" colspan="4" th:text="${category.name}">Category Name</th>
+                </tr>
+            </thead>
 
-        <tbody>
-            <tr th:each="tempItem : ${items}">
-                <td th:text="${tempItem.name}"></td>
-                <td th:text="${tempItem.category}"></td>
-                <td th:text="${tempItem.status}"></td>
-                <td>Future Edit Button</td>
-            </tr>
-        </tbody>
+            <tbody>
+                <tr th:each="tempItem, itemIndex : ${categories[__${catIndex.index}__].items}">
+                    <td class="item-name" th:text="${tempItem.name}"></td>
 
-    </table>
+                    <td>
+                        <div class="radio-option">
+                            <input type="radio"  th:field="*{categories[__${catIndex.index}__].items[__${itemIndex.index}__].status}" th:name="|status-${tempItem.id}|" th:value="IN_STOCK" th:checked="${tempItem.status.name() == 'IN_STOCK'}"
+                                   th:id="|IN_STOCK-${tempItem.id}|" class="hidden-radio">
+                            <label th:for="|IN_STOCK-${tempItem.id}|" class="radio-label stocked">Stocked</label>
+                        </div>
+                    </td>
 
+                    <td>
+                        <div class="radio-option">
+                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="'low stock'" th:checked="${tempItem.status.name() == 'LOW_STOCK'}"
+                                th:id="|LOW_STOCK-${tempItem.id}|" class="hidden-radio">
+                            <label th:for="|LOW_STOCK-${tempItem.id}|" class="radio-label low">Low</label>
+                         </div>
+                     </td>
+
+                    <td>
+                        <div class="radio-option">
+                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="'out of stock'" th:checked="${tempItem.status.name() == 'OUT_OF_STOCK'}"
+                                   th:id="|OUT_OF_STOCK-${tempItem.id}|" class="hidden-radio">
+                            <label th:for="|OUT_OF_STOCK-${tempItem.id}|" class="radio-label out">Out</label>
+                        </div>
+                    </td>
+
+                </tr>
+            </tbody>
+
+        </table>
+
+
+    </div>
+    <div class="add-buttons">
+        <a class="button add" href="http://localhost:8080">Add Category</a>
+        <a class="button add" href="http://localhost:8080">Add Item</a>
+    </div>
+
+
+<div class="footer">
+
+    <a class="button household" href="http://localhost:8080">My Household</a>
+
+    <button class="button submit" type="submit" form="checklist">Submit Changes</button>
 
 </div>
 
-
-
-
+</form>
 
 
 

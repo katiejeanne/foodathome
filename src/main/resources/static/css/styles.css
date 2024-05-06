@@ -1,0 +1,165 @@
+
+
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #1e1a2b;
+    color: white;
+    padding-bottom: 500px;
+}
+
+h1 {
+    padding: 30px;
+    font-size: 60px;
+    font-family: "Righteous", sans-serif;
+    text-align: center;
+}
+
+table {
+    width: 95%;
+    table-layout: fixed;
+    border-radius: 10px;
+    margin: 20px auto;
+}
+
+td {
+    padding: 10px;
+    width: 25%;
+}
+
+.item-name {
+    font-size: 20px;
+}
+
+th {
+    background-color: #564981;
+    text-align: center;
+    font-size: 25px;
+    padding: 10px;
+    font-weight: normal;
+    font-family: "Righteous", sans-serif;
+}
+
+tr:nth-child(odd) {
+    background-color: #322b47;
+}
+
+tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.hidden-radio {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+
+.radio-option {
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.hidden-radio:checked + .radio-label {
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 10px;
+}
+
+.hidden-radio:checked + .stocked {
+    background-color: #398949;
+}
+
+.hidden-radio:checked + .low {
+    background-color: #cda73a;
+    color: white;
+    padding: 8px 35px;
+}
+
+.hidden-radio:checked + .out {
+    background-color: #9e323f;
+    padding: 8px 35px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    margin: auto;
+}
+
+.add-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: auto;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: hsl(254, 28%, 40%, 0.75);
+    text-align: center;
+    padding: 10px;
+}
+
+.button {
+    display: block;
+    font-family: "Poppins", sans-serif;
+    color: white;
+    font-size: 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: darkslategray;
+    border-width: 1px;
+    padding: 5px;
+    box-shadow: none;
+    text-decoration: none;
+    text-align: center;
+    width: 200px;
+}
+
+.button.submit {
+    background-color: #398949;
+}
+
+.button.add {
+    background-color: #564981;
+}
+
+.button.household {
+    background-color: #cda73a;
+}
+
+.button.view-all {
+    background-color: #564981;
+}
+
+.button.view-available {
+    background-color: #398949;
+}
+
+.button.view-shopping {
+    background-color: #9e323f;
+}

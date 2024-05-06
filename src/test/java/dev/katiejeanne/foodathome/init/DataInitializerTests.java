@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @Profile("test")
 public class DataInitializerTests {
@@ -33,9 +35,10 @@ public class DataInitializerTests {
 
         dataInitializer.run();
 
-
-
-
+        assertEquals(2, userRepository.findAll().size());
+        assertEquals(2, householdRepository.findAll().size());
+        assertEquals(6, categoryRepository.findAll().size());
+        assertEquals(30, itemRepository.findAll().size());
 
     }
 
