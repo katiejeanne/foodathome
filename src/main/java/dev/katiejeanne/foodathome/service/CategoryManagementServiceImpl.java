@@ -2,19 +2,30 @@ package dev.katiejeanne.foodathome.service;
 
 import dev.katiejeanne.foodathome.domain.Category;
 import dev.katiejeanne.foodathome.domain.Item;
+import dev.katiejeanne.foodathome.domain.Status;
+import dev.katiejeanne.foodathome.exception.ItemNotFoundException;
+import dev.katiejeanne.foodathome.exception.UnauthorizedUserException;
 import dev.katiejeanne.foodathome.repositories.CategoryRepository;
+import dev.katiejeanne.foodathome.repositories.ItemRepository;
+import dev.katiejeanne.foodathome.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class CategoryManagementServiceImpl implements CategoryManagementService {
 
     private final CategoryRepository categoryRepository;
 
+    private final ItemRepository itemRepository;
+
     @Autowired
-    public CategoryManagementServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryManagementServiceImpl(CategoryRepository categoryRepository, ItemRepository itemRepository) {
         this.categoryRepository = categoryRepository;
+        this.itemRepository = itemRepository;
     }
 
     @Transactional
@@ -47,6 +58,51 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         category = categoryRepository.save(category);
         return category;
     }
+
+    @Override
+    @Transactional
+    public void updateItemStatuses(Map<String, String> allParams) {
+
+        // Get the household id of the active user
+        Long householdId = SecurityUtils.getCurrentHouseholdId();
+
+        allParams.forEach((item, status) -> {
+
+            // check if param contains an item status
+            if (!item.startsWith("status-")) {
+                return;
+            }
+
+            try {
+                // get item's Id from param
+                Long itemId = Long.parseLong(item.substring(7));
+
+                // retrieve item from repository
+                Item tempItem = itemRepository.findById(itemId).
+                        orElseThrow(() -> new ItemNotFoundException("Item " + itemId + " not found"));
+
+                // compare household ids to make sure they match
+                Long itemHouseholdId = tempItem.getCategory().getHousehold().getId();
+                if (!Objects.equals(itemHouseholdId, householdId)) {
+                    throw new UnauthorizedUserException("User not authorized to update this item.");
+                }
+
+                // Update item status and save
+                tempItem.setStatus(Status.valueOf(status));
+                itemRepository.save(tempItem);
+            }
+            catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid item format for " + item, e);
+            }
+            catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid status for " + item, e);
+            }
+
+        });
+
+    }
+
+
 
 
 }

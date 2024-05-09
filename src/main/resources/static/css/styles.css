@@ -163,3 +163,17 @@ tr:last-child td:last-child {
 .button.view-shopping {
     background-color: #9e323f;
 }
+
+@keyframes hideMessage {
+    to {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+.message-box {
+    animation-name: hideMessage;
+    animation-duration: 0.1s;
+    animation-fill-mode: forwards;
+    animation-delay: 3s;
+}

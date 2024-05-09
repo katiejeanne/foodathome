@@ -22,7 +22,7 @@
         <a class="button view-shopping"  href="http://localhost:8080">Shopping List</a>
     </div>
 
-    <div th:each="category, catIndex : ${categoriesForm.categoriesAndItems}">
+    <div th:each="category : ${categoriesForm.categoriesAndItems}">
 
         <table>
             <thead>
@@ -32,12 +32,12 @@
             </thead>
 
             <tbody>
-                <tr th:each="tempItem, itemIndex : ${categories[__${catIndex.index}__].items}">
+                <tr th:each="tempItem : ${category.items}">
                     <td class="item-name" th:text="${tempItem.name}"></td>
 
                     <td>
                         <div class="radio-option">
-                            <input type="radio"  th:field="*{categories[__${catIndex.index}__].items[__${itemIndex.index}__].status}" th:name="|status-${tempItem.id}|" th:value="IN_STOCK" th:checked="${tempItem.status.name() == 'IN_STOCK'}"
+                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="IN_STOCK" th:checked="${tempItem.status.name() == 'IN_STOCK'}"
                                    th:id="|IN_STOCK-${tempItem.id}|" class="hidden-radio">
                             <label th:for="|IN_STOCK-${tempItem.id}|" class="radio-label stocked">Stocked</label>
                         </div>
@@ -45,7 +45,7 @@
 
                     <td>
                         <div class="radio-option">
-                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="'low stock'" th:checked="${tempItem.status.name() == 'LOW_STOCK'}"
+                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="LOW_STOCK" th:checked="${tempItem.status.name() == 'LOW_STOCK'}"
                                 th:id="|LOW_STOCK-${tempItem.id}|" class="hidden-radio">
                             <label th:for="|LOW_STOCK-${tempItem.id}|" class="radio-label low">Low</label>
                          </div>
@@ -53,7 +53,7 @@
 
                     <td>
                         <div class="radio-option">
-                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="'out of stock'" th:checked="${tempItem.status.name() == 'OUT_OF_STOCK'}"
+                            <input type="radio" th:name="|status-${tempItem.id}|" th:value="OUT_OF_STOCK" th:checked="${tempItem.status.name() == 'OUT_OF_STOCK'}"
                                    th:id="|OUT_OF_STOCK-${tempItem.id}|" class="hidden-radio">
                             <label th:for="|OUT_OF_STOCK-${tempItem.id}|" class="radio-label out">Out</label>
                         </div>
@@ -75,7 +75,8 @@
 <div class="footer">
 
     <a class="button household" href="http://localhost:8080">My Household</a>
-
+    <div th:if="${successMessage}" class="message-box" th:text="${successMessage}" ></div>
+    <div th:if="${errorMessage}" class="message-box" th:text="${errorMessage}" ></div>
     <button class="button submit" type="submit" form="checklist">Submit Changes</button>
 
 </div>
