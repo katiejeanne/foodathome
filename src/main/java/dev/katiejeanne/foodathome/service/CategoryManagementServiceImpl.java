@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -102,7 +104,37 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
 
     }
 
+    public Category getAvailableItems(Category category) {
 
+        List<Item> allItems = category.getItems();
+
+        Category tempCategory = new Category();
+        tempCategory.setName(category.getName());
+
+        for (Item item : allItems) {
+            if (item.getStatus().equals(Status.IN_STOCK) || item.getStatus().equals(Status.LOW_STOCK)) {
+                tempCategory.addItem(item);
+            }
+        }
+
+        return tempCategory;
+    }
+
+    public Category getLowAndOutItems(Category category) {
+
+        List<Item> allItems = category.getItems();
+
+        Category tempCategory = new Category();
+        tempCategory.setName(category.getName());
+
+        for (Item item : allItems) {
+            if (item.getStatus().equals(Status.LOW_STOCK) || item.getStatus().equals(Status.OUT_OF_STOCK)) {
+                tempCategory.addItem(item);
+            }
+        }
+
+        return tempCategory;
+    }
 
 
 }

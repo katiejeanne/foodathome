@@ -117,9 +117,9 @@ tr:last-child td:last-child {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: hsl(254, 28%, 40%, 0.75);
+    background-color: hsl(254, 28%, 40%, 1);
     text-align: center;
-    padding: 10px;
+    padding: 5px;
 }
 
 .button {

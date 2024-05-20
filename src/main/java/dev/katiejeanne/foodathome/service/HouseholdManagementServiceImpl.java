@@ -117,4 +117,6 @@ public class HouseholdManagementServiceImpl implements HouseholdManagementServic
 
         return categoryRepository.findCategoriesByHouseholdId(householdId);
     }
+
+    
 }

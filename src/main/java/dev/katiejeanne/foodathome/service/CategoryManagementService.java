@@ -15,4 +15,8 @@ public interface CategoryManagementService {
 
     @Transactional
     void updateItemStatuses(Map<String, String> allParams);
+
+    Category getAvailableItems(Category category);
+
+    Category getLowAndOutItems(Category category);
 }

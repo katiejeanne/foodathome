@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class MainViewController {
         return "mainview";
     }
 
-    @PostMapping("/")
+    @PostMapping({"/", "/available", "/shoppinglist"})
     public String updateStatus(@RequestParam Map<String, String> allParams, RedirectAttributes redirectAttributes) {
 
         try {
@@ -52,5 +53,43 @@ public class MainViewController {
 
 
         return "redirect:/";
+    }
+
+    @GetMapping("/available")
+    public String getAvailableItems(Model theModel) {
+
+        List<Category> allCategoriesAndItems = householdManagementService.getAllCategoriesWIthItems();
+        List<Category> categoriesWithAvailableItems = new ArrayList<>();
+
+        for (Category category : allCategoriesAndItems) {
+            Category tempCategory = categoryManagementService.getAvailableItems(category);
+            categoriesWithAvailableItems.add(tempCategory);
+        }
+
+        CategoriesForm categoriesForm = new CategoriesForm();
+        categoriesForm.setCategoriesAndItems(categoriesWithAvailableItems);
+
+        theModel.addAttribute("categoriesForm", categoriesForm);
+
+        return "mainview";
+    }
+
+    @GetMapping("/shoppinglist")
+    public String getShoppingList(Model theModel) {
+
+        List<Category> allCategoriesAndItems = householdManagementService.getAllCategoriesWIthItems();
+        List<Category> categoriesWithLowOrOutItems = new ArrayList<>();
+
+        for (Category category : allCategoriesAndItems) {
+            Category tempCategory = categoryManagementService.getLowAndOutItems(category);
+            categoriesWithLowOrOutItems.add(tempCategory);
+        }
+
+        CategoriesForm categoriesForm = new CategoriesForm();
+        categoriesForm.setCategoriesAndItems(categoriesWithLowOrOutItems);
+
+        theModel.addAttribute("categoriesForm", categoriesForm);
+
+        return "mainview";
     }
 }

@@ -17,9 +17,9 @@
         <h1>Food@Home</h1>
     </div>
     <div class="page-header">
-        <a class="button view-all" href="http://localhost:8080">All Items</a>
-        <a class="button view-available" href="http://localhost:8080">Available Items</a>
-        <a class="button view-shopping"  href="http://localhost:8080">Shopping List</a>
+        <a class="button view-all" href="/">All Items</a>
+        <a class="button view-available" href="/available">Available Items</a>
+        <a class="button view-shopping"  href="/shoppinglist">Shopping List</a>
     </div>
 
     <div th:each="category : ${categoriesForm.categoriesAndItems}">
