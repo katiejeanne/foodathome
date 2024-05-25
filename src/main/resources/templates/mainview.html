@@ -33,7 +33,9 @@
 
             <tbody>
                 <tr th:each="tempItem : ${category.items}">
-                    <td class="item-name" th:text="${tempItem.name}"></td>
+                    <td>
+                        <a class="item-name" th:href="@{/edititem/{id}(id=${tempItem.id})}" th:text="${tempItem.name}">Item Name</a>
+                    </td>
 
                     <td>
                         <div class="radio-option">
@@ -68,7 +70,7 @@
     </div>
     <div class="add-buttons">
         <a class="button add" href="http://localhost:8080">Add Category</a>
-        <a class="button add" href="http://localhost:8080">Add Item</a>
+        <a class="button add" href="/additem">Add Item</a>
     </div>
 
 

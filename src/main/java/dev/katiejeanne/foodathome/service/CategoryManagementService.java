@@ -19,4 +19,8 @@ public interface CategoryManagementService {
     Category getAvailableItems(Category category);
 
     Category getLowAndOutItems(Category category);
+
+    void saveItem(Item item);
+
+    Item findItem(Long id);
 }

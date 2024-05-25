@@ -136,5 +136,57 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         return tempCategory;
     }
 
+    @Transactional
+    @Override
+    public void saveItem(Item item) {
+
+        System.out.println("Item id: " + item.getId());
+
+        Long previousCategoryId = 0L;
+
+        if (item.getId() != null) {
+            // Retrieve the previously saved data for this item
+            Item previousItem = itemRepository.findById(item.getId()).orElseThrow(() -> new ItemNotFoundException("Item could not be found"));
+
+            // Store the previous category id for update later
+            previousCategoryId = previousItem.getCategory().getId();
+
+
+            // Compare household Ids to make sure user is authorized to modify this item
+            Long householdId = previousItem.getCategory().getHousehold().getId();
+            Long userHouseholdId = SecurityUtils.getCurrentHouseholdId();
+            if (!householdId.equals(userHouseholdId)) {
+                throw new UnauthorizedUserException("User not authorized to modify this item.");
+            }
+        }
+
+        Item savedItem = itemRepository.save(item);
+        Long currentCategoryId = savedItem.getCategory().getId();
+
+        // Compare category Ids to see if they have changed
+        if (previousCategoryId != 0L && !previousCategoryId.equals(currentCategoryId)) {
+            // If item was previously assigned to a different category, remove the item from that category.
+            System.out.println("Item categories are different.");
+            Category previousCategory = categoryRepository.findById(previousCategoryId).orElseThrow();
+            previousCategory.removeItem(savedItem);
+            categoryRepository.save(previousCategory);
+        }
+
+        // Find the current category the item is assigned to
+        Category currentCategory = categoryRepository.findById(currentCategoryId).orElseThrow();
+
+        // Only add the item to the current category if it doesn't already belong to that category
+        if (!currentCategory.getItems().contains(savedItem)) {
+            currentCategory.addItem(savedItem);
+            categoryRepository.save(currentCategory);
+        }
+
+    }
+
+    @Override
+    public Item findItem(Long id) {
+        return itemRepository.findById(id).orElseThrow();
+    }
+
 
 }
