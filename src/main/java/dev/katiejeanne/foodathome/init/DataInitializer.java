@@ -49,7 +49,7 @@ public class DataInitializer implements CommandLineRunner {
         // Initialize with two households, each with 1 user and 3 categories filled with 5 items each.
 
         // First create the users
-        User testUser1 = initializeUser("testuser1", "{noop}test",
+        User testUser1 = initializeUser("demo", "{noop}demo",
                 "Test User 1", "testuser1@example.com");
         User testUser2 = initializeUser("testuser2", "{noop}test",
                 "Test User 2", "testuser2@example.com");

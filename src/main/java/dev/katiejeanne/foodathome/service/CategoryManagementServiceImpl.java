@@ -1,18 +1,19 @@
 package dev.katiejeanne.foodathome.service;
 
 import dev.katiejeanne.foodathome.domain.Category;
+import dev.katiejeanne.foodathome.domain.Household;
 import dev.katiejeanne.foodathome.domain.Item;
 import dev.katiejeanne.foodathome.domain.Status;
 import dev.katiejeanne.foodathome.exception.ItemNotFoundException;
 import dev.katiejeanne.foodathome.exception.UnauthorizedUserException;
 import dev.katiejeanne.foodathome.repositories.CategoryRepository;
+import dev.katiejeanne.foodathome.repositories.HouseholdRepository;
 import dev.katiejeanne.foodathome.repositories.ItemRepository;
 import dev.katiejeanne.foodathome.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,10 +25,13 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
 
     private final ItemRepository itemRepository;
 
+    private final HouseholdRepository householdRepository;
+
     @Autowired
-    public CategoryManagementServiceImpl(CategoryRepository categoryRepository, ItemRepository itemRepository) {
+    public CategoryManagementServiceImpl(CategoryRepository categoryRepository, ItemRepository itemRepository, HouseholdRepository householdRepository) {
         this.categoryRepository = categoryRepository;
         this.itemRepository = itemRepository;
+        this.householdRepository = householdRepository;
     }
 
     @Transactional
@@ -186,6 +190,32 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
     @Override
     public Item findItem(Long id) {
         return itemRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public Category findCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public void saveCategory(Category category) {
+
+        Long userHouseholdId = SecurityUtils.getCurrentHouseholdId();
+
+        // If category already exists, verify that this user is authorized to edit the category.
+        if (category.getId() != null) {
+            Category previousCategory = categoryRepository.findById(category.getId()).orElseThrow();
+            Long previousHouseholdId = previousCategory.getHousehold().getId();
+            if (!previousHouseholdId.equals(userHouseholdId)) {
+                throw new UnauthorizedUserException("User not authorized to edit this category");
+            }
+        }
+
+        Household thisHousehold = householdRepository.findById(userHouseholdId).orElseThrow();
+        category.setHousehold(thisHousehold);
+
+
+        categoryRepository.save(category);
     }
 
 

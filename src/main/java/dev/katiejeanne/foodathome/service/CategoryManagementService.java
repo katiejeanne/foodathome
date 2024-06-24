@@ -23,4 +23,8 @@ public interface CategoryManagementService {
     void saveItem(Item item);
 
     Item findItem(Long id);
+
+    Category findCategory(Long id);
+
+    void saveCategory(Category category);
 }

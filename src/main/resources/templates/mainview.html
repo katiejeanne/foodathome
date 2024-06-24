@@ -27,7 +27,9 @@
         <table>
             <thead>
                 <tr>
-                    <th scope="col" colspan="4" th:text="${category.name}">Category Name</th>
+                    <th scope="col" colspan="4" >
+                        <a th:href="@{/editcategory/{id}(id=${category.id})}" th:text="${category.name}">Category Name</a>
+                    </th>
                 </tr>
             </thead>
 
@@ -69,16 +71,16 @@
 
     </div>
     <div class="add-buttons">
-        <a class="button add" href="http://localhost:8080">Add Category</a>
+        <a class="button add" href="/addcategory">Add Category</a>
         <a class="button add" href="/additem">Add Item</a>
     </div>
 
-
-<div class="footer">
-
-    <a class="button household" href="http://localhost:8080">My Household</a>
     <div th:if="${successMessage}" class="message-box" th:text="${successMessage}" ></div>
     <div th:if="${errorMessage}" class="message-box" th:text="${errorMessage}" ></div>
+<div class="footer">
+
+
+
     <button class="button submit" type="submit" form="checklist">Submit Changes</button>
 
 </div>

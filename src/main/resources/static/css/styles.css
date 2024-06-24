@@ -113,7 +113,7 @@ tr:last-child td:last-child {
 .footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -176,4 +176,8 @@ tr:last-child td:last-child {
     animation-duration: 0.1s;
     animation-fill-mode: forwards;
     animation-delay: 3s;
+}
+
+.login {
+    margin: 10px;
 }

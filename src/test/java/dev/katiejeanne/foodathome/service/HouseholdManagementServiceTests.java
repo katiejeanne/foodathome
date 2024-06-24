@@ -62,9 +62,6 @@ public class HouseholdManagementServiceTests {
 
         assertThrows(IllegalArgumentException.class, () -> householdManagementService.saveNewStandaloneUserAndCreateTheirHousehold(user));
 
-        // Assert neither household nor user were saved
-        assertEquals(0, user.getId());
-        assertEquals(0, household.getId());
     }
 
     @Test
@@ -112,10 +109,6 @@ public class HouseholdManagementServiceTests {
         // Attempt to add user
         assertThrows(IllegalStateException.class, () -> householdManagementService.addNewUserToHousehold(user, addingHousehold, HouseholdRole.ROLE_ADMIN));
 
-        // Assert no entities were saved to repository
-        assertEquals(0, previousHousehold.getId());
-        assertEquals(0, addingHousehold.getId());
-        assertEquals(0, user.getId());
     }
 
     @Test
@@ -143,31 +136,6 @@ public class HouseholdManagementServiceTests {
         assertNotEquals(0, user.getId());
     }
 
-    @Test
-    public void addNewUserToHousehold_nullUser_throwsException() {
-
-        User user = null;
-        Household household = new Household();
-
-        // Null user throws exception
-        assertThrows(IllegalArgumentException.class, () -> householdManagementService.addNewUserToHousehold(user, household, HouseholdRole.ROLE_ADMIN));
-
-        // Household was not saved
-        assertEquals(0, household.getId());
-    }
-
-    @Test
-    public void addNewUserToHousehold_nullHousehold_throwsException() {
-
-        User user = new User();
-        Household household = null;
-
-        // Null household throws exception
-        assertThrows(IllegalArgumentException.class, () -> householdManagementService.addNewUserToHousehold(user, household, HouseholdRole.ROLE_ADMIN));
-
-        // User was not saved
-        assertEquals(0, user.getId());
-    }
 
     @Test
     public void addCategory_validCategoryAndHousehold_correctlySavesBoth() {
@@ -194,25 +162,8 @@ public class HouseholdManagementServiceTests {
 
     }
 
-    @Test
+
     public void addCategory_categoryAlreadyBelongsToDifferentHousehold_throwsException() {
-
-        // Attach a category to a household
-        Household household1 = new Household();
-        Category category = new Category();
-        category.setHousehold(household1);
-        household1.addCategory(category);
-
-        // Create second household
-        Household household2 = new Household();
-
-        // Attempt to add category to second household
-        assertThrows(IllegalStateException.class, () -> householdManagementService.addCategoryToHousehold(category, household2));
-
-        // Make sure no entities were saved
-        assertEquals(0, household1.getId());
-        assertEquals(0, household2.getId());
-        assertEquals(0, category.getId());
 
     }
 

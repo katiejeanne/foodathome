@@ -41,7 +41,6 @@ public class ItemController {
 
     @GetMapping("/edititem/{id}")
     public String editItem(@PathVariable Long id, Model theModel) {
-        System.out.println("Item id" + id);
         Item item = categoryManagementService.findItem(id);
         List<Category> categories = householdManagementService.getAllCategoriesWIthItems();
         theModel.addAttribute("item", item);
