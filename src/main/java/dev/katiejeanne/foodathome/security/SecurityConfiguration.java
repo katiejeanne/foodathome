@@ -37,7 +37,7 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests( authz -> authz
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/css/**").permitAll()
                         .anyRequest().authenticated())
                         .formLogin(form -> form
                                 .loginPage("/login")
