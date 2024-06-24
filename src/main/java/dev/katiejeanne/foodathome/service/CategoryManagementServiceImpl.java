@@ -147,24 +147,32 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         System.out.println("Item id: " + item.getId());
 
         Long previousCategoryId = 0L;
+        Item tempItem = null;
 
         if (item.getId() != null) {
             // Retrieve the previously saved data for this item
-            Item previousItem = itemRepository.findById(item.getId()).orElseThrow(() -> new ItemNotFoundException("Item could not be found"));
+            tempItem = itemRepository.findById(item.getId()).orElseThrow(() -> new ItemNotFoundException("Item could not be found"));
 
             // Store the previous category id for update later
-            previousCategoryId = previousItem.getCategory().getId();
+            previousCategoryId = tempItem.getCategory().getId();
 
 
             // Compare household Ids to make sure user is authorized to modify this item
-            Long householdId = previousItem.getCategory().getHousehold().getId();
+            Long householdId = tempItem.getCategory().getHousehold().getId();
             Long userHouseholdId = SecurityUtils.getCurrentHouseholdId();
             if (!householdId.equals(userHouseholdId)) {
                 throw new UnauthorizedUserException("User not authorized to modify this item.");
             }
+
+            // Assign new values to tempItem
+            tempItem.setCategory(item.getCategory());
+            tempItem.setName(item.getName());
+        }
+        else {
+            tempItem = item;
         }
 
-        Item savedItem = itemRepository.save(item);
+        Item savedItem = itemRepository.save(tempItem);
         Long currentCategoryId = savedItem.getCategory().getId();
 
         // Compare category Ids to see if they have changed

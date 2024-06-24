@@ -178,6 +178,14 @@ tr:last-child td:last-child {
     animation-delay: 3s;
 }
 
-.login {
+
+.login-text {
+    max-width: 800px;
     margin: 10px;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+.strong {
+    font-weight: bold;
 }
