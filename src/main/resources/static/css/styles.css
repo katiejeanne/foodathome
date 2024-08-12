@@ -40,6 +40,10 @@ th {
     font-family: "Righteous", sans-serif;
 }
 
+a {
+    color: white;
+}
+
 tr:nth-child(odd) {
     background-color: #322b47;
 }
@@ -58,6 +62,13 @@ tr:last-child td:first-child {
 
 tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
+}
+
+/* Hide the date column if the viewport is less than 800px */
+@media (max-width: 799px) {
+    .hide-column {
+        display: none;
+    }
 }
 
 .hidden-radio {

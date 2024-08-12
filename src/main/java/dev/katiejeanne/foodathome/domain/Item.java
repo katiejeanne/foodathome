@@ -2,6 +2,7 @@ package dev.katiejeanne.foodathome.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -20,9 +21,24 @@ public class Item {
     @JoinColumn(name = "item_category")
     private Category category;
 
+
+    @Temporal(TemporalType.DATE)
+    private Date lastUpdated;
+
+
     public Item() {
         // New items should always have in stock status by default
         this.status = Status.IN_STOCK;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        lastUpdated = new Date();
+    }
+
+    @PrePersist
+    public void onCreate() {
+        lastUpdated = new Date();
     }
 
     public Long getId() {
@@ -55,6 +71,10 @@ public class Item {
         this.name = name;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,5 +87,7 @@ public class Item {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 
 }

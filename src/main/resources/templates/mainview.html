@@ -27,7 +27,7 @@
         <table>
             <thead>
                 <tr>
-                    <th scope="col" colspan="4" >
+                    <th scope="col" colspan="5" >
                         <a th:href="@{/editcategory/{id}(id=${category.id})}" th:text="${category.name}">Category Name</a>
                     </th>
                 </tr>
@@ -37,6 +37,9 @@
                 <tr th:each="tempItem : ${category.items}">
                     <td>
                         <a class="item-name" th:href="@{/edititem/{id}(id=${tempItem.id})}" th:text="${tempItem.name}">Item Name</a>
+                    </td>
+
+                    <td class="hide-column">Last update: <span th:text="${tempItem.lastUpdated}"></span>
                     </td>
 
                     <td>
