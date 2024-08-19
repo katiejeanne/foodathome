@@ -226,5 +226,23 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         categoryRepository.save(category);
     }
 
+    @Override
+    public void deleteItem(Long id) {
+
+        Long userHouseholdId = SecurityUtils.getCurrentHouseholdId();
+
+        Item tempItem = itemRepository.findById(id).orElseThrow();
+        Category tempCategory = tempItem.getCategory();
+        Long itemHouseholdId = tempCategory.getHousehold().getId();
+
+        if (!Objects.equals(userHouseholdId, itemHouseholdId)) {
+            throw new UnauthorizedUserException("User not authorized to edit this item");
+        }
+
+        tempCategory.removeItem(tempItem);
+        itemRepository.delete(tempItem);
+
+    }
+
 
 }

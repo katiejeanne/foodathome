@@ -29,6 +29,9 @@
             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${item.category != null && category.id == item.category.id}"></option>
         </select>
     </div>
+    <div>
+        <a class="item-name" th:href="@{/deleteitem/{id}(id=${item.id})}">Delete Item</a>
+    </div>
 
 
 <div class="footer">

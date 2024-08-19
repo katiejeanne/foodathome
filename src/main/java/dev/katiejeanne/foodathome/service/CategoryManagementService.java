@@ -27,4 +27,6 @@ public interface CategoryManagementService {
     Category findCategory(Long id);
 
     void saveCategory(Category category);
+
+    void deleteItem(Long id);
 }

@@ -54,6 +54,13 @@ public class ItemController {
         return "redirect:/";
     }
 
+    @GetMapping("/deleteitem/{id}")
+    public String deleteItem(@PathVariable Long id) {
+
+        categoryManagementService.deleteItem(id);
+        return "redirect:/";
+
+    }
 
 
 
