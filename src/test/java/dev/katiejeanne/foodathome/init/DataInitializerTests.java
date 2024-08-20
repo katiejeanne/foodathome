@@ -38,7 +38,7 @@ public class DataInitializerTests {
         assertEquals(2, userRepository.findAll().size());
         assertEquals(2, householdRepository.findAll().size());
         assertEquals(6, categoryRepository.findAll().size());
-        assertEquals(31, itemRepository.findAll().size());
+        assertEquals(30, itemRepository.findAll().size());
 
     }
 
